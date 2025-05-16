@@ -1,20 +1,54 @@
-<header class="navbar">
-    <div class="container">
-      <a href="{{ url_for('index') }}" class="navbar-brand">REUSEMI</a>
-      <nav class="navbar-nav">
-        <a href="{{ url_for('index') }}" class="nav-link">Início</a>
-        <a href="{{ url_for('categorias') }}" class="nav-link">Categorias</a>
-        {% if 'usuario_id' in session %}
-          <a href="{{ url_for('perfil') }}" class="nav-link">Meu Perfil</a>
-          <a href="{{ url_for('logout') }}" class="nav-link">Sair</a>
-          {% if session.get('user_nivel') == 'admin' %}
-            <a href="{{ url_for('admin') }}" class="nav-link">Admin</a>
-          {% endif %}
-        {% else %}
-          <a href="{{ url_for('login') }}" class="nav-link">Entrar</a>
-          <a href="{{ url_for('cadastro') }}" class="nav-link">Cadastrar</a>
-        {% endif %}
-      </nav>
-    </div>
+    <!-- Navbar Premium -->
+    <header class="navbar navbar-expand-lg">
+      <div class="container">
+          <a href="{{ url_for('index') }}" class="navbar-brand">
+              <span class="logo-icon">♻️</span>
+              <span>REUSEMI</span>
+          </a>
+          
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+              <i class="bi bi-list"></i>
+          </button>
+          
+          <nav class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav ms-auto">
+                  <li class="nav-item">
+                      <a href="{{ url_for('index') }}" class="nav-link active">
+                          <i class="bi bi-house-door"></i> Início
+                      </a>
+                  </li>
+                  <li class="nav-item">
+                      <a href="{{ url_for('categorias') }}" class="nav-link">
+                          <i class="bi bi-tags"></i> Categorias
+                      </a>
+                  </li>
+                  {% if 'usuario_id' in session %}
+                  <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                          <i class="bi bi-person-circle"></i> Minha Conta
+                      </a>
+                      <ul class="dropdown-menu">
+                          <li><a class="dropdown-item" href="{{ url_for('perfil') }}">Meu Perfil</a></li>
+                          <li><hr class="dropdown-divider"></li>
+                          <li><a class="dropdown-item" href="{{ url_for('logout') }}">Sair</a></li>
+                          {% if session.get('user_nivel') == 'admin' %}
+                          <li><a class="dropdown-item text-warning" href="{{ url_for('admin') }}">Área Admin</a></li>
+                          {% endif %}
+                      </ul>
+                  </li>
+                  {% else %}
+                  <li class="nav-item">
+                      <a href="{{ url_for('login') }}" class="nav-link">
+                          <i class="bi bi-box-arrow-in-right"></i> Entrar
+                      </a>
+                  </li>
+                  <li class="nav-item">
+                      <a href="{{ url_for('cadastro') }}" class="nav-link btn btn-outline-primary ms-2">
+                          <i class="bi bi-person-plus"></i> Cadastrar
+                      </a>
+                  </li>
+                  {% endif %}
+              </ul>
+          </nav>
+      </div>
   </header>
-  

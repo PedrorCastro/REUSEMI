@@ -1,116 +1,93 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
- <meta charset="UTF-8">
- <title>Anunciar Item</title>
- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <meta charset="UTF-8">
+  <title>Anunciar Item - REUSEMI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=Poppins:wght@600..800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
- <header>
-  <div class="container">
-   <h1>REUSEMI</h1>
-   <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  {% include 'navbar.html' %}
+  
+  <section class="create-listing-section">
     <div class="container">
-        <a class="navbar-brand" href="{{ url_for('index') }}">REUSEMI</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{{ url_for('index') }}">Início</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('categorias') }}">Categorias</a>
-                </li>
-                {% if 'usuario_id' in session %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('perfil') }}">Meu Perfil</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('anunciar') }}">Anunciar</a>  </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('logout') }}">Sair</a>
-                </li>
-                {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('login') }}">Entrar</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('cadastro') }}">Cadastrar</a>
-                </li>
-                {% endif %}
-            </ul>
+      <div class="listing-header">
+        <h1><i class="bi bi-plus-circle"></i> Anunciar novo item</h1>
+        <p>Compartilhe itens que você não usa mais e encontre novas oportunidades</p>
+      </div>
+      
+      <div class="row">
+        <div class="col-lg-8 mx-auto">
+          <form id="anunciarForm" enctype="multipart/form-data">
+            <div class="mb-4">
+              <label for="imagem" class="form-label">Imagem do item</label>
+              <input type="file" class="form-control" id="imagem" name="imagem" accept="image/*" required>
+              <div class="form-text">Adicione uma foto clara do item</div>
+            </div>
+            
+            <div class="mb-4">
+              <label for="nome" class="form-label">Nome do item</label>
+              <input type="text" class="form-control" id="nome" name="nome" required>
+            </div>
+            
+            <div class="mb-4">
+              <label for="descricao" class="form-label">Descrição detalhada</label>
+              <textarea class="form-control" id="descricao" name="descricao" rows="4" required></textarea>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6 mb-4">
+                <label for="categoria" class="form-label">Categoria</label>
+                <select class="form-select" id="categoria" name="categoria" required>
+                  <option value="">Selecione...</option>
+                  {% for categoria in categorias %}
+                  <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              
+              <div class="col-md-6 mb-4">
+                <label for="condicao" class="form-label">Condição</label>
+                <select class="form-select" id="condicao" name="condicao" required>
+                  <option value="Novo">Novo</option>
+                  <option value="Usado - Excelente">Usado - Excelente</option>
+                  <option value="Usado - Bom">Usado - Bom</option>
+                  <option value="Usado - Regular">Usado - Regular</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6 mb-4">
+                <label for="cidade" class="form-label">Cidade</label>
+                <input type="text" class="form-control" id="cidade" name="cidade" required>
+              </div>
+              
+              <div class="col-md-6 mb-4">
+                <label for="estado" class="form-label">Estado</label>
+                <select class="form-select" id="estado" name="estado" required>
+                  <option value="SP">São Paulo</option>
+                  <option value="RJ">Rio de Janeiro</option>
+                  <!-- Outros estados -->
+                </select>
+              </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-lg">
+              <i class="bi bi-check-circle"></i> Publicar anúncio
+            </button>
+          </form>
         </div>
+      </div>
     </div>
-</nav>
-  </div>
- </header>
-
- <section class="hero">
-  <div class="container">
-   <h2>Anuncie seu Item</h2>
-   <form id="anunciarForm">
-    <label for="nome">Nome do Item:</label><br>
-    <input type="text" id="nome" name="nome" required><br>
-
-    <label for="descricao">Descrição:</label><br>
-    <textarea id="descricao" name="descricao" rows="4" cols="50"></textarea><br>
-
-    <label for="categoria">Categoria:</label><br>
-    <select id="categoria" name="categoria">
-     <option value="roupas">Roupas</option>
-     <option value="eletronicos">Eletrônicos</option>
-     <option value="livros">Livros</option>
-     </select><br>
-
-    <label for="cidade">Cidade:</label><br>
-    <input type="text" id="cidade" name="cidade" required><br>
-
-    <button type="submit" class="btn">Anunciar</button>
-   </form>
-  </div>
- </section>
-
- <footer>
-  <div class="container">
-   <p>&copy; 2025 REUSEMI.</p>
-  </div>
- </footer>
-
- <script>
-  document.getElementById('anunciarForm').addEventListener('submit', function(event) {
-   event.preventDefault();
-
-   const nome = document.getElementById('nome').value;
-   const descricao = document.getElementById('descricao').value;
-   const categoria = document.getElementById('categoria').value;
-   const cidade = document.getElementById('cidade').value;
-
-   fetch('/anunciar', {
-    method: 'POST',
-    headers: {
-     'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ nome, descricao, categoria, cidade })
-   })
-    .then(response => response.json())
-    .then(data => {
-     if (data.status === 'success') {
-      alert('Item anunciado com sucesso!');
-      window.location.href = 'index.html';  // Redireciona para a página inicial
-     } else {
-      alert('Erro ao anunciar item: ' + data.message);
-     }
-    })
-    .catch(error => {
-     console.error('Erro:', error);
-     alert('Erro ao comunicar com o servidor.');
-    });
-  });
- </script>
+  </section>
+  
+  {% include 'footer.html' %}
+  
+  <script>
+    // Script de envio do formulário atualizado
+  </script>
 </body>
 </html>

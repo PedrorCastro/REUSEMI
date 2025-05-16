@@ -83,22 +83,24 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         senha = request.form.get('senha')
-
-        db = get_db()
-        c = db.cursor()
-        c.execute("SELECT * FROM usuarios WHERE email = ?", (email,))
-        usuario = c.fetchone()
-
-        if usuario and check_password_hash(usuario['senha'], senha):
-            session['usuario_id'] = usuario['id']
-            session['user_email'] = usuario['email']
-            session['user_nivel'] = usuario['nivel']
-            return redirect(url_for('perfil'))
+        
+        # Verifique se os campos foram preenchidos
+        if not email or not senha:
+            return render_template('login.html', error='Por favor, preencha todos os campos')
+        
+        # Aqui você deve verificar as credenciais no seu banco de dados
+        # Exemplo básico (substitua pela sua lógica real):
+        if email == 'usuario@exemplo.com' and senha == 'senha123':
+            session['usuario_id'] = 1  # Armazena o ID do usuário na sessão
+            session['user_email'] = email
+            return redirect(url_for('perfil'))  # Redireciona para a página de perfil
         else:
             return render_template('login.html', error='Credenciais inválidas')
-
+    
+    # Se for GET, apenas mostra o formulário
     return render_template('login.html')
-
+    
+    
 @app.route('/logout')
 def logout():
     session.clear()
@@ -221,6 +223,10 @@ def exportar_usuarios():
 
     except Exception as e:
         return f"Erro ao exportar usuários: {str(e)}", 500
+
+@app.route('/foster')  # Verifique se esta rota existe
+def foster():
+    return render_template('foster.html')  # Este arquivo precisa existir
 
 if __name__ == '__main__':
     init_db()
