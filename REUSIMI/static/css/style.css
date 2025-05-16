@@ -1,0 +1,98 @@
+/* style.css */
+
+/* Geral */
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #F8F9FA; /* Cor de fundo clara */
+  color: #333;
+ }
+ 
+ .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+ }
+ 
+ /* Navbar */
+ .navbar {
+  background-color: #FFFFFF; /* Fundo branco para a Navbar */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+ }
+ 
+ .navbar-brand {
+  color: #4CAF50; /* Verde vibrante para o título */
+  font-weight: bold;
+ }
+ 
+ .navbar-nav .nav-link {
+  color: #333;
+  margin-left: 10px;
+ }
+ 
+ .navbar-nav .nav-link:hover {
+  color: #4CAF50; /* Verde no hover */
+ }
+ 
+ /* Hero Section */
+ .hero {
+  background-color: #E9ECEF; /* Fundo cinza claro */
+  padding: 50px 20px;
+  text-align: center;
+  color: #555;
+ }
+ 
+ .hero h2 {
+  color: #4CAF50; /* Verde para o título */
+  margin-bottom: 20px;
+ }
+ 
+ .btn-primary {
+  background-color: #4CAF50; /* Verde para o botão primário */
+  border-color: #4CAF50;
+ }
+ 
+ .btn-primary:hover {
+  background-color: #388E3C; /* Verde mais escuro no hover */
+  border-color: #388E3C;
+ }
+ 
+ /* Cards */
+ .card {
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+ }
+ 
+ .card-title {
+  color: #4CAF50; /* Verde para títulos de cards */
+ }
+ 
+ .card-text {
+  color: #555;
+ }
+ 
+ .btn-outline-primary {
+  color: #4CAF50; /* Verde para botões de contorno */
+  border-color: #4CAF50;
+ }
+ 
+ .btn-outline-primary:hover {
+  background-color: #F0E68C; /* Amarelo suave no hover */
+  border-color: #4CAF50;
+ }
+ 
+ /* Formulários */
+ .form-control:focus {
+  border-color: #4CAF50; /* Verde no foco do input */
+  box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+ }
+ 
+ /* Footer */
+ footer {
+  background-color: #FFFFFF;
+  color: #777;
+  text-align: center;
+  padding: 20px 0;
+  margin-top: 50px;
+ }
