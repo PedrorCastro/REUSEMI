@@ -672,3 +672,43 @@ p {
 .mb-3 form-check{
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
+
+/* Imagens responsivas */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Cards flexíveis */
+.card {
+  transition: transform 0.3s;
+  margin-bottom: 20px;
+}
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* Formulários responsivos */
+.form-control {
+  width: 100%;
+}
+
+/* Botões */
+.btn {
+  white-space: nowrap;
+}
+
+/* Ajustes para telas pequenas */
+@media (max-width: 767px) {
+  .hero-title {
+    font-size: 1.8rem;
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
+  }
+  
+  .navbar-brand {
+    font-size: 1.2rem;
+  }
+}

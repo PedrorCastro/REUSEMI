@@ -1,14 +1,54 @@
-from flask import Flask, request, jsonify, g, session, render_template, url_for, redirect, send_file
+from flask import Flask, request, jsonify, g, session, render_template, url_for, redirect, send_file, flash
 from flask_cors import CORS
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 import pandas as pd
 from io import BytesIO
+from flask_httpauth import HTTPBasicAuth
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+import os
+from dotenv import load_dotenv
+from models import Usuario, Item
+from extensions import db
+from flask_login import login_user, logout_user, login_required
+
+@app.route('/cadastro', methods=['GET', 'POST'])
+def cadastro():
+    if request.method == 'POST':
+        usuario = Usuario(
+            nome=request.form['nome'],
+            email=request.form['email']
+        )
+        usuario.set_senha(request.form['senha'])
+        db.session.add(usuario)
+        db.session.commit()
+        flash('Cadastro realizado com sucesso!')
+        return redirect(url_for('login'))
+    return render_template('cadastro.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        usuario = Usuario.query.filter_by(email=request.form['email']).first()
+        if usuario and usuario.check_senha(request.form['senha']):
+            login_user(usuario)
+            return redirect(url_for('home'))
+        flash('Email ou senha incorretos')
+    return render_template('login.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
 
 app = Flask(__name__)
 CORS(app)
-app.config['SECRET_KEY'] = 'your_secret_key_here'  # Altere para uma chave segura
+app.config['SECRET_KEY'] = 'Jopepa123'  # Altere para uma chave segura
+app.config.update(...)
+
 
 # Decoradores
 def login_required(f):
@@ -33,6 +73,8 @@ def nivel_minimo(nivel_necessario):
 
 # Banco de dados
 DATABASE = 'reusemi.db'
+
+
 
 def get_db():
     db = getattr(g, '_database', None)
@@ -165,6 +207,9 @@ def perfil():
 
     return render_template('perfil.html', usuario=usuario)
 
+
+app.config['SESSION_COOKIE_SECURE'] = True
+app.config['REMEMBER_COOKIE_SECURE'] = True
 @app.route('/anunciar', methods=['GET', 'POST'])
 @login_required
 def anunciar():
@@ -228,6 +273,40 @@ def exportar_usuarios():
 def foster():
     return render_template('foster.html')  # Este arquivo precisa existir
 
+
+
+auth = HTTPBasicAuth()
+
+users = {
+    "Pedro": "Jopepa123"
+}
+
+@auth.verify_password
+def verify_password(username, password):
+    return users.get(username) == password
+
+@app.route('/')
+@auth.login_required
+def home():
+    return "Conteúdo protegido"
+
+
+
+load_dotenv()
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DB_URI')
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Inicialização do db deve vir DEPOIS de criar o app
+db.init_app(app)  # Agora db está definido
+migrate = Migrate(app, db)
+
 if __name__ == '__main__':
-    init_db()
-    app.run(debug=True)
+    with app.app_context():
+        db.create_all()
+    app.run(host='0.0.0.0', port=8080, debug=True)
+
+
+
