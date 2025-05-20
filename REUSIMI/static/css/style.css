@@ -126,7 +126,7 @@ p {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 5rem;
+  height: 3rem;
 }
 
 .navbar-brand {
@@ -444,8 +444,8 @@ p {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 20%;
+  height: 50%;
   background: url('../images/pattern.png') repeat;
   opacity: 0.05;
 }
@@ -711,4 +711,11 @@ img {
   .navbar-brand {
     font-size: 1.2rem;
   }
+}
+
+
+.hero-image img-fluid{
+  display: flex;
+  width: 50px;
+  max-height: 750px;
 }
