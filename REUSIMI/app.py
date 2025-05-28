@@ -1,18 +1,21 @@
-from flask import Flask, request, jsonify, g, session, render_template, url_for, redirect, send_file, flash
-from flask_cors import CORS
+from flask import Flask, request, jsonify, render_template, url_for, redirect, flash, send_from_directory
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 import pandas as pd
 from io import BytesIO
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 import os
 from dotenv import load_dotenv
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from settings import Config
+from flask_cors import CORS
+
 
 # Inicializações
 load_dotenv()
 app = Flask(__name__)
+app.config.from_object(Config)
 CORS(app)
 
 # Configurações
@@ -22,7 +25,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SESSION_COOKIE_SECURE'] = True
 app.config['REMEMBER_COOKIE_SECURE'] = True
 
-# Inicialização do banco de dados
+# Inicialização do banco de dados (APENAS UMA INSTÂNCIA)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
@@ -30,7 +33,7 @@ migrate = Migrate(app, db)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
-# Modelos (movidos para o mesmo arquivo para evitar imports circulares)
+# Modelos devem ficar aqui para evitar imports circulares
 class Usuario(db.Model):
     __tablename__ = 'usuarios'
     id = db.Column(db.Integer, primary_key=True)
@@ -45,6 +48,21 @@ class Usuario(db.Model):
 
     def check_senha(self, senha):
         return check_password_hash(self.senha, senha)
+
+    def get_id(self):
+        return str(self.id)
+
+    @property
+    def is_authenticated(self):
+        return True
+
+    @property
+    def is_active(self):
+        return True
+
+    @property
+    def is_anonymous(self):
+        return False
 
 class Item(db.Model):
     __tablename__ = 'itens'
@@ -73,6 +91,22 @@ def nivel_minimo(nivel_necessario):
     return decorator
 
 # Rotas
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(
+        os.path.join(app.root_path, 'static', 'img', 'web'),
+        'icons8-sinal-de-reciclagem-color-16.png',
+        mimetype='image/vnd.microsoft.icon'
+    )
+
+@app.route('/trocas_sustentaveis.png')
+def img_index():
+    return send_from_directory(
+        os.path.join(app.root_path, 'static', 'img'),
+        '20250519_2027_Design de Troca Sustentável_simple_compose_01jvndvxqxefb955m2d0ydbjcj.png',
+        mimetype='image/vnd.microsoft.icon'
+    )
+
 @app.route('/')
 def index():
     return render_template('index.html')
